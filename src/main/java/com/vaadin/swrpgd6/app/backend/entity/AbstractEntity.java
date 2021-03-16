@@ -1,13 +1,15 @@
 package com.vaadin.swrpgd6.app.backend.entity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-@MappedSuperclass
+import com.vaadin.flow.component.polymertemplate.Id;
+// delete all these commented imports and annotations when the app is finished!
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.GenerationType;
+//import javax.persistence.Id;
+//import javax.persistence.MappedSuperclass;
+//@MappedSuperclass
 public abstract class AbstractEntity {
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+//    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private Long id;
     public Long getId() {
         return id;

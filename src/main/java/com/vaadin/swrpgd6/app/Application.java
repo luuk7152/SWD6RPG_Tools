@@ -8,10 +8,16 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * The entry point of the Spring Boot application.
  */
 @SpringBootApplication
-public class Application extends SpringBootServletInitializer {
+public class Application extends SpringBootServletInitializer
+{
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
+        System.out.println("SWRPGD6 Tools has started.");
+
         SpringApplication.run(Application.class, args);
+
+        System.out.println("SWRPGD6 Tools has ended.");
     }
 
 }
