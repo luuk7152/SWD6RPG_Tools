@@ -4,33 +4,45 @@ import com.vaadin.swrpgd6.app.backend.entity.PlayerCharacter;
 
 import java.sql.*;
 import java.util.ArrayList;
+/*
+To do:
+implement the filter.
+Perhaps move the update list logic to a query method and have the update call the query method
+this would pass an empty string to the query
+if logic in the query method would either add + "WHERE " + column + "like" + filterText" or not if the string is empty or not.
+maybe two strings are sent for now, first the column we're filtering, then the filterText.
+Version 2 would overload the updateList method and more or less do the above
 
+ */
 
 public class DatabaseService {
     private String url = "jdbc:sqlserver://DESKTOP-3S2OPCN\\SQLEXPRESS;databaseName=characters";  //;integratedsecurity=true
     private String userName = "d6test ";
     private String password = "testtest";
-    private int doesThisWork = 99999;
     //This method will need to be updated as PlayerCharacter is expanded.  Likely, it will spin through an array or some other
     //datatype and insert the values so I'm not sending a million parameters to the method.
+
     public void dbInsert(PlayerCharacter playerCharacter)
     {
         try
-        {
+        {     //refactor this, don't use these variables here, use the methods below
             String characterName = playerCharacter.getCharacterName();
-            String template = playerCharacter.getTemplate();
+            String CharacterTemplate = playerCharacter.getTemplate();
+            String CharacterBackground = playerCharacter.getBackground();
             int str = playerCharacter.getStr();
             int kno = playerCharacter.getKno();
             int dex = playerCharacter.getDex();
+            int mec = playerCharacter.getMec();
+            int per = playerCharacter.getPer();
+            int tec = playerCharacter.getTec();
+
 
             Connection connection = DriverManager.getConnection(url, userName, password);
             System.out.println("Connected to Microsoft SQL Server to insert Character");
 
             String sql = "INSERT INTO character_stats (name, template, dexterity, knowledge, mechanical, perception, strength, technology, background) "
-                    + "VALUES ('"+ playerCharacter.getCharacterName() +"' , '" + playerCharacter.getTemplate()
-                    +"' , " + playerCharacter.getDex() + ", " + playerCharacter.getKno() +", "
-                    + playerCharacter.getMec() +", " + playerCharacter.getPer() +", " + playerCharacter.getStr()
-                    +", " + playerCharacter.getTec() +", '" + playerCharacter.getBackground() + "' ) ";
+                    + "VALUES ('"+ characterName +"' , '" + CharacterTemplate +"' , " + dex + ", " + kno +", "
+                    + mec +", " + per +", " + str +", " + tec +", '" + CharacterBackground + "' ) ";
             Statement statement = connection.createStatement();
 
             int rows = statement.executeUpdate(sql);
