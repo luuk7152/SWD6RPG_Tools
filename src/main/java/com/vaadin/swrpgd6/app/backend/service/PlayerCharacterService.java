@@ -4,36 +4,24 @@ package com.vaadin.swrpgd6.app.backend.service;
 import com.vaadin.swrpgd6.app.backend.entity.PlayerCharacter;
 import com.vaadin.swrpgd6.app.backend.entity.Skill;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 
 @Service
-public final class PlayerCharacterService
-{
+public final class PlayerCharacterService {
     private static PlayerCharacterService Instance;
     private DatabaseService dbService = new DatabaseService();
-    private PlayerCharacterService()
-    {
-
+    private PlayerCharacterService() {
     }
-
     public static PlayerCharacterService getInstance() {
-        if(Instance == null)
-        {
+        if(Instance == null) {
             Instance = new PlayerCharacterService();
         }
-
         return Instance;
     }
-
     private PlayerCharacter heldCharacter = new PlayerCharacter();
-
-
-    public void holdCharacter(PlayerCharacter playerCharacter)
-    {
+    public void holdCharacter(PlayerCharacter playerCharacter) {
         heldCharacter = playerCharacter;
     }
-
     public void saveCharacter()  {
         dbService.upsert(heldCharacter);  //upsert logic also checks for "new character" and queries the CharacterId for the following Skill inserts
         dbService.dbUpsertCharacterSkills(heldCharacter.getDexterity());
@@ -42,32 +30,22 @@ public final class PlayerCharacterService
         dbService.dbUpsertCharacterSkills(heldCharacter.getPerception());
         dbService.dbUpsertCharacterSkills(heldCharacter.getStrength());
         dbService.dbUpsertCharacterSkills(heldCharacter.getTechnology());
-        System.out.println("end of saveCharacter() so some CharacterSkills should have been deleted");
+
     }
-    public void deleteCharacter()
-    {
+    public void deleteCharacter() {
         dbService.dbDelete();
     }
-
-    public PlayerCharacter getHeldCharacter()
-    {
+    public PlayerCharacter getHeldCharacter() {
         return heldCharacter;
     }
-
-    public void saveSkillTest(Skill skill)
-    {
+    public void saveSkillTest(Skill skill) {
         //DatabaseService dbService = new DatabaseService();
         dbService.dbInsertCharacterSkill(skill);
     }
-
-    public ArrayList<PlayerCharacter> getCharacterList()
-    {
+    public ArrayList<PlayerCharacter> getCharacterList() {
         return dbService.getList();
     }
-
-
-    public void addCharacterSkill(Skill skill)
-    {
+    public void addCharacterSkill(Skill skill) {
         switch(skill.getSkillAttribute()){
             case "dex":
             if (heldCharacter.getDexSkills().contains(skill)){
@@ -111,13 +89,9 @@ public final class PlayerCharacterService
                     heldCharacter.getTecSkills().add(skill);
                 }
             break;
-
         }
     }
-
-
-    public void initializeHeldCharacter()
-    {
+    public void initializeHeldCharacter() {
         PlayerCharacter initCharacter = new PlayerCharacter();
         holdCharacter(initCharacter);
     }

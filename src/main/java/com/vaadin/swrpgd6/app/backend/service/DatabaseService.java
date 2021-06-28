@@ -6,20 +6,9 @@ import com.vaadin.swrpgd6.app.backend.entity.Skill;
 
 import java.sql.*;
 import java.util.ArrayList;
-/*
-To do:
-implement the filter.
-Perhaps move the update list logic to a query method and have the update call the query method
-this would pass an empty string to the query
-if logic in the query method would either add + "WHERE " + column + "like" + filterText" or not if the string is empty or not.
-maybe two strings are sent for now, first the column we're filtering, then the filterText.
-Version 2 would overload the updateList method and more or less do the above
 
- */
-
-public class DatabaseService
-{
-    private String url = "jdbc:sqlserver://DESKTOP-3S2OPCN\\SQLEXPRESS;databaseName=characters";  //;integratedsecurity=true
+public class DatabaseService {
+    private String url = "jdbc:sqlserver://DESKTOP-3S2OPCN\\SQLEXPRESS;databaseName=characters";
     private String userName = "d6test ";
     private String password = "testtest";
     //This method will need to be updated as PlayerCharacter is expanded.  Likely, it will spin through an array or some other
@@ -30,8 +19,7 @@ public class DatabaseService
             update(playerCharacter);
             System.out.println("CharacterId must be greater than zero this character exists");
             //Update
-        }
-        else {
+        } else {
             insert(playerCharacter);
             System.out.println("CharacterId must not be greater than zero, this character doesn't exist yet");
             //Insert

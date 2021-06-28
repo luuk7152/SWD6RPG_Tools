@@ -34,8 +34,7 @@ public class MainView extends VerticalLayout
 
 
 
-    public MainView()        //PlayerCharacterService playerCharacterService  I took this arg out of MainView()
-    {
+    public MainView() {
         routerLink.getElement().appendChild(newCharacterButton.getElement());
         addClassName("list-view");
         setSizeFull();
@@ -45,53 +44,37 @@ public class MainView extends VerticalLayout
         createHeader();
         add(routerLink,  grid);  // I removed filterText, for now
         updateList();
-
     }
-
     private void createHeader() {
         H1 logo = new H1("SWRPGD6 Tools");
         logo.addClassName("logo");
         Anchor logout = new Anchor("logout", "Log out");
-        HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), logo,
-                logout);
+        HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), logo, logout);
         header.expand(logo);
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.setWidth("100%");
         header.addClassName("header");
         add(header);
     }
-
-    private void configureFilter()
-    {
+    private void configureFilter() {
         filterText.setPlaceholder("Filter by name. . .");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
         filterText.addValueChangeListener(e -> updateList());
     }
-
-    private void configureGrid()
-    {
+    private void configureGrid() {
         grid.addClassName("contact-grid");
         grid.setSizeFull();
         grid.setColumns("characterName", "template", "background", "maker", "makeDate");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(event -> editCharacter(event.getValue()));
     }
-
-    public void editCharacter(PlayerCharacter playerCharacter )
-    {
+    public void editCharacter(PlayerCharacter playerCharacter ) {
         //This is where we will query the DB, get the full character, then pass that to holdCharacter()
         PlayerCharacterService.getInstance().holdCharacter(playerCharacter);
         UI.getCurrent().navigate(CharacterForm.class);
     }
-
-    private void updateList()
-    {   //This is querying the database and returning an ArrayList of characters to populate the grid
-        //The getList method below should be in the PlayerCharacterService, since I'm creating an instance
-        //of that already.  databaseService should only do database tasks, PlayerCharacterService, should handle
-        //any playerCharacter requests.
-
+    private void updateList() {   //This is querying the database and returning an ArrayList of characters to populate the grid
         grid.setItems(PlayerCharacterService.getInstance().getCharacterList());
     }
-
 }

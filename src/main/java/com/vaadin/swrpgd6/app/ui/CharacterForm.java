@@ -8,9 +8,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -81,14 +79,12 @@ public class CharacterForm extends FormLayout {
         DatabaseService databaseService = new DatabaseService();
         databaseService.recall(PlayerCharacterService.getInstance().getHeldCharacter().getCharacterId());
         loadCharacter();
-        System.out.println(dexHeader.getAttr().getValue()+ " is the dexterity level of this new character");
     }
     private HorizontalLayout createHeader() {
         H1 logo = new H1("SWRPGD6 Tools");
         logo.addClassName("logo");
         Anchor logout = new Anchor("logout", "Log out");
-        HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), logo,
-                logout);
+        HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), logo, logout);
         header.expand(logo);
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.setWidth("100%");
@@ -101,31 +97,25 @@ public class CharacterForm extends FormLayout {
         return wrapperLayout;
     }
     private HorizontalLayout createButtonsLayout() {
-
+        H3 print = new H3("Ctrl+p to Print");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
-
         close.addClickShortcut(Key.ESCAPE);
         save.addClickListener(event -> validateAndSave());    //playerCharacter
-//
         delete.addClickListener(event -> validateAndDelete());
         close.addClickListener(event -> closeForm());
 
-        return new HorizontalLayout(save, delete, close);
+        return new HorizontalLayout(save, delete, close, print);
     }
-
     private HorizontalLayout attributeRow() {
         return new HorizontalLayout(attributeColumn1(),attributeColumn2(),attributeColumn3());
     }
     private HorizontalLayout descriptiveFields() {
-
         return new HorizontalLayout(descriptiveColumn1(),descriptiveColumn2(),descriptiveColumn3());
-
     }
     private VerticalLayout descriptiveColumn1() {
-
         return new VerticalLayout(characterName, maker, template, species, quote);
     }
     private VerticalLayout descriptiveColumn2() {
@@ -141,7 +131,6 @@ public class CharacterForm extends FormLayout {
         personality.setWidth("300px");
         personality.setValueChangeMode(ValueChangeMode.LAZY);
         personality.addValueChangeListener(e -> PlayerCharacterService.getInstance().getHeldCharacter().setPersonality(personality.getValue()));
-
         return new VerticalLayout(background, description, personality);
     }
     private VerticalLayout descriptiveColumn3() {
@@ -161,7 +150,6 @@ public class CharacterForm extends FormLayout {
         objectives.setWidth("300px");
         objectives.setValueChangeMode(ValueChangeMode.LAZY);
         objectives.addValueChangeListener(e -> PlayerCharacterService.getInstance().getHeldCharacter().setObjectives(objectives.getValue()));
-
         return new VerticalLayout(associates, specialAbilities, equipment, objectives);
     }
     private HorizontalLayout pointsRow() {
@@ -174,7 +162,6 @@ public class CharacterForm extends FormLayout {
         forceSensitive.setLabel("Force Sensitive");
         forceSensitive.setValue("Yes");
         forceSensitive.addValueChangeListener(e -> PlayerCharacterService.getInstance().getHeldCharacter().setForceSensitive(forceSensitive.getValue()));
-
         return new HorizontalLayout(characterPointCount,forcePointCount,darkSideCount,moveRate,condition,forceSensitive);
     }
     private VerticalLayout attributeColumn1() {
@@ -182,7 +169,6 @@ public class CharacterForm extends FormLayout {
         perSkills.addSkill.addClickListener(event -> addCharacterSkill(perSkills));
         dexHeader.getAttr().addValueChangeListener(e -> dexHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(dexHeader.getAttr().getValue())));
         perHeader.getAttr().addValueChangeListener(e -> perHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(perHeader.getAttr().getValue())));
-        //listeners and logic can go here and reference the fields as below.
         dexSkills.skill1.deleteSkill.addClickListener(e -> adjustSkillLevel(dexSkills.skill1,"delete"));
         return new VerticalLayout(dexHeader.getHeader(),dexSkills.getCluster(), perHeader.getHeader(),perSkills.getCluster());
     }
@@ -208,15 +194,12 @@ public class CharacterForm extends FormLayout {
     private void addCharacterSkill(SkillCluster skillCluster) {
         PlayerCharacterService.getInstance().addCharacterSkill(skillCluster.skillBox.getValue());
         loadAllCharacterSkills();
-        //loadCharacter();  // <---This has to go, I need a method called Refresh Character, that will just reload all the fields.
     }
     private void closeForm() {
         PlayerCharacterService.getInstance().initializeHeldCharacter();
         UI.getCurrent().navigate(MainView.class);
     }
     private void loadCharacter() {
-        System.out.println("loading Character Dexterity Level is: "+PlayerCharacterService.getInstance().getHeldCharacter().getDex());
-        //setPlayerCharacter(PlayerCharacterService.getInstance().getHeldCharacter());
         characterName.setValue(PlayerCharacterService.getInstance().getHeldCharacter().getCharacterName());
         template.setValue(PlayerCharacterService.getInstance().getHeldCharacter().getTemplate());
         maker.setValue(PlayerCharacterService.getInstance().getHeldCharacter().getMaker());
@@ -241,24 +224,23 @@ public class CharacterForm extends FormLayout {
         loadAllCharacterSkills();
     }
     private void loadCharacterPoints() {
-        if (PlayerCharacterService.getInstance().getHeldCharacter().getCharacterId() > 0)
-        {
+        if (PlayerCharacterService.getInstance().getHeldCharacter().getCharacterId() > 0) {
             characterPointCount.setValue(PlayerCharacterService.getInstance().getHeldCharacter().getCharacterPoints());
         }
     }
     private void loadAttributeLevels() {
-            dexHeader.getAttr().setValue(PlayerCharacterService.getInstance().getHeldCharacter().getDex());
-            dexHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(dexHeader.getAttr().getValue()));
-            knoHeader.getAttr().setValue(PlayerCharacterService.getInstance().getHeldCharacter().getKno());
-            knoHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(knoHeader.getAttr().getValue()));
-            mecHeader.getAttr().setValue(PlayerCharacterService.getInstance().getHeldCharacter().getMec());
-            mecHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(mecHeader.getAttr().getValue()));
-            perHeader.getAttr().setValue(PlayerCharacterService.getInstance().getHeldCharacter().getPer());
-            perHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(perHeader.getAttr().getValue()));
-            strHeader.getAttr().setValue(PlayerCharacterService.getInstance().getHeldCharacter().getStr());
-            strHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(strHeader.getAttr().getValue()));
-            tecHeader.getAttr().setValue(PlayerCharacterService.getInstance().getHeldCharacter().getTec());
-            tecHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(tecHeader.getAttr().getValue()));
+        dexHeader.getAttr().setValue(PlayerCharacterService.getInstance().getHeldCharacter().getDex());
+        dexHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(dexHeader.getAttr().getValue()));
+        knoHeader.getAttr().setValue(PlayerCharacterService.getInstance().getHeldCharacter().getKno());
+        knoHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(knoHeader.getAttr().getValue()));
+        mecHeader.getAttr().setValue(PlayerCharacterService.getInstance().getHeldCharacter().getMec());
+        mecHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(mecHeader.getAttr().getValue()));
+        perHeader.getAttr().setValue(PlayerCharacterService.getInstance().getHeldCharacter().getPer());
+        perHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(perHeader.getAttr().getValue()));
+        strHeader.getAttr().setValue(PlayerCharacterService.getInstance().getHeldCharacter().getStr());
+        strHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(strHeader.getAttr().getValue()));
+        tecHeader.getAttr().setValue(PlayerCharacterService.getInstance().getHeldCharacter().getTec());
+        tecHeader.getAttrD6().setValue(GameService.getInstance().pipsToD(tecHeader.getAttr().getValue()));
     }
     private void loadSkills() {
         //this loads the available skills in the combobox, this will be replaced.
@@ -297,7 +279,6 @@ public class CharacterForm extends FormLayout {
         loadSkillLine(i++,attributeSkills, attributeHeader, skillCluster.skill9);
         loadSkillLine(i,attributeSkills, attributeHeader, skillCluster.skill10);
     }
-
     private void loadSkillLine(int i, ArrayList<Skill> skills, AttributeHeader attributeHeader, SkillLine skillLine) {
         if (PlayerCharacterService.getInstance().getHeldCharacter().getCharacterId() > 0) {
             if (skills.isEmpty()) {
@@ -308,7 +289,6 @@ public class CharacterForm extends FormLayout {
                     int totalPips = skills.get(i).getSkillLevel() + attributeHeader.getAttr().getValue();
                     skillLine.skillD6.setValue(GameService.getInstance().pipsToD(totalPips)); //change this with pip logic
                 }
-                System.out.println("Old Character, SkillList was NOT empty");
             }
         } else {
             if (skills.isEmpty()){
@@ -323,11 +303,9 @@ public class CharacterForm extends FormLayout {
             }
         }
     }
-
     private void saveCharacterSkills(ArrayList<Skill> skills, SkillCluster cluster) {
         //This method should send an Attriubte and the method should spin through the attribute skills.
     }
-
     private void validateAndSave(){
         validateCharacter();
         PlayerCharacterService.getInstance().saveCharacter();
@@ -362,7 +340,6 @@ public class CharacterForm extends FormLayout {
         PlayerCharacterService.getInstance().getHeldCharacter().setCondition(condition.getValue());
         PlayerCharacterService.getInstance().getHeldCharacter().setForceSensitive(forceSensitive.getValue());
     }
-
     private void validateAndDelete() {   //deleteCharacter is null if the character hasn't been created yet, since the
             if (PlayerCharacterService.getInstance().getHeldCharacter().getCharacterId() > 0) {
                 PlayerCharacterService.getInstance().deleteCharacter();
@@ -405,8 +382,6 @@ public class CharacterForm extends FormLayout {
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
-
-
     //**************************************************************************************************************************
     private void adjustSkillLevel(SkillLine skillLine, String command){
         switch (command){
@@ -417,7 +392,6 @@ public class CharacterForm extends FormLayout {
             case "delete":
                 System.out.println("You want this skill to go away!");
         }
-
     }
     //**************************************************************************************************************************
     class SkillCluster {
@@ -435,7 +409,6 @@ public class CharacterForm extends FormLayout {
         SkillLine skill8 = new SkillLine();
         SkillLine skill9 = new SkillLine();
         SkillLine skill10 = new SkillLine();
-
         private HorizontalLayout skillSelectionLine()
         {
             addSkill.addThemeVariants(ButtonVariant.LUMO_SMALL);
@@ -444,61 +417,46 @@ public class CharacterForm extends FormLayout {
         }
         //(Skill::SkillgetSkillName());
 
-        public HorizontalLayout skillName1()
-        {
+        public HorizontalLayout skillName1() {
             return new HorizontalLayout(skill1.getSkillLine());
         }
-        public HorizontalLayout skillName2()
-        {
+        public HorizontalLayout skillName2() {
             return new HorizontalLayout(skill2.getSkillLine());
         }
-        public HorizontalLayout skillName3()
-        {
+        public HorizontalLayout skillName3() {
             return new HorizontalLayout(skill3.getSkillLine());
         }
-        public HorizontalLayout skillName4()
-        {
+        public HorizontalLayout skillName4() {
             return new HorizontalLayout(skill4.getSkillLine());
         }
-        public HorizontalLayout skillName5()
-        {
+        public HorizontalLayout skillName5() {
             return new HorizontalLayout(skill5.getSkillLine());
         }
-        public HorizontalLayout skillName6()
-        {
+        public HorizontalLayout skillName6() {
             return new HorizontalLayout(skill6.getSkillLine());
         }
-        public HorizontalLayout skillName7()
-        {
+        public HorizontalLayout skillName7() {
             return new HorizontalLayout(skill7.getSkillLine());
         }
-        public HorizontalLayout skillName8()
-        {
+        public HorizontalLayout skillName8() {
             return new HorizontalLayout(skill8.getSkillLine());
         }
-        public HorizontalLayout skillName9()
-        {
+        public HorizontalLayout skillName9() {
             return new HorizontalLayout(skill9.getSkillLine());
         }
-        public HorizontalLayout skillName10()
-        {
+        public HorizontalLayout skillName10() {
             return new HorizontalLayout(skill10.getSkillLine());
         }
-
-        private VerticalLayout Skills()
-        {
+        private VerticalLayout Skills() {
             return new VerticalLayout(skillSelectionLine(),skillName1(), skillName2(), skillName3(), skillName4(),
                     skillName5(), skillName6(), skillName7(),
                     skillName8(), skillName9(), skillName10());
         }
-
-        public VerticalLayout getCluster()
-        {
+        public VerticalLayout getCluster() {
             return Skills();
         }
     }
-    private class SkillLine
-    {
+    private class SkillLine {
         TextField skillName = new TextField();
         Button deleteSkill = new Button("x");
         TextField skillD6 = new TextField();
@@ -513,24 +471,16 @@ public class CharacterForm extends FormLayout {
             skillD6.setReadOnly(true);
             skillD6.addThemeVariants(TextFieldVariant.LUMO_SMALL);
             deleteSkill.addThemeVariants(ButtonVariant.LUMO_SMALL);
-            deleteSkill.addClickListener(event -> System.out.println("you clicked to delete a skill line, more code needed here"));
-            //deleteSkill.addClickListener(event -> adjustSkillLevel(deleteSkill,"delete"));
             plusSkill.addThemeVariants(ButtonVariant.LUMO_SMALL);
-            //plusSkill.addClickListener(event -> System.out.println("you clicked to increase a skill, more code needed here"));
-            plusSkill.addClickListener(event -> System.out.println("you clicked to increase a skill, more code needed here"));
             minusSkill.addThemeVariants(ButtonVariant.LUMO_SMALL);
-            //minusSkill.addClickListener(event -> System.out.println("you clicked to decrease a skill, more code needed here"));
-            minusSkill.addClickListener(event -> System.out.println("you clicked to decrease a skill, more code needed here"));
             return new HorizontalLayout(skillName,skillD6); //,plusSkill,minusSkill,deleteSkill
         }
 
-        public HorizontalLayout getSkillLine()
-        {
+        public HorizontalLayout getSkillLine() {
             return skillLine();
         }
     }
-    private class AttributeHeader
-    {
+    private class AttributeHeader {
         private FormLayout attributeLayout = new FormLayout();
         private IntegerField attr = new IntegerField();
         private TextField attrD6 = new TextField();
@@ -538,20 +488,16 @@ public class CharacterForm extends FormLayout {
         private Button minusAttribute = new Button("-");
         private String attributeName;
 
-        AttributeHeader(String attributeName)
-        {
+        AttributeHeader(String attributeName) {
             this.attributeName = attributeName;
         }
-        private FormLayout attributeHeader()
-        {
-
+        private FormLayout attributeHeader() {
             attr.setHasControls(true);
             attrD6.setWidth("75px");
             attrD6.addThemeVariants(TextFieldVariant.LUMO_SMALL.LUMO_SMALL);
             attrD6.setReadOnly(true);
             attr.setWidth("50px");
             attr.setMin(3);
-
             attributeLayout.addFormItem(attrD6, attributeName);
             attributeLayout.add(attr);  //,plusAttribute,minusAttribute
             return attributeLayout;
@@ -562,22 +508,17 @@ public class CharacterForm extends FormLayout {
         public Button getMinusAttribute(){
             return minusAttribute;
         }
-        public IntegerField getAttr()
-        {
+        public IntegerField getAttr() {
             return attr;
         }
-        public TextField getAttrD6()
-        {
+        public TextField getAttrD6() {
             return attrD6;
         }
-        public FormLayout getHeader()
-        {
+        public FormLayout getHeader() {
             return attributeHeader();
         }
-
-
     }
-}// The final bracket in CharacterForm class
+}
 
 
 
