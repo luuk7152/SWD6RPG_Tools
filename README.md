@@ -1,72 +1,37 @@
-# Project Base for Vaadin and Spring Boot
-
-This is an example project that can be used as a starting point to create your own Vaadin application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
-
-
-## Running the Application
-There are two ways to run the application :  using `mvn spring-boot:run` or by running the `Application` class directly from your IDE.
-
-You can use any IDE of your preference,but we suggest Eclipse or Intellij IDEA.
-Below are the configuration details to start the project using a `spring-boot:run` command. Both Eclipse and Intellij IDEA are covered.
-
-#### Eclipse
-- Right click on a project folder and select `Run As` --> `Maven build..` . After that a configuration window is opened.
-- In the window set the value of the **Goals** field to `spring-boot:run` 
-- You can optionally select `Skip tests` checkbox
-- All the other settings can be left to default
-
-Once configurations are set clicking `Run` will start the application
-
-#### Intellij IDEA
-- On the right side of the window, select Maven --> Plugins--> `spring-boot` --> `spring-boot:run` goal
-- Optionally, you can disable tests by clicking on a `Skip Tests mode` blue button.
-
-Clicking on the green run button will start the application.
-
-After the application has started, you can view your it at http://localhost:8080/ in your browser.
+Independent Study Final Report
+John Luukkonen
+5/20/2021
+This independent study course was focused on developing a full-stack application using the Vaadin framework, Java, and MS Sql database on the back-end.  Study began by completing a tutorial to learn the Vaadin framework, then an original application was designed and built for the remainder of the term.  The project is completed with the following deliverables.  Dated Development Journal, Final Report(this document), Final presentation and Slide Deck submitted, Course Retrospective, Vaadin Tutorial CRM Application Source Code, and the Student-defined Application Source Code.
+The Vaadin tutorial was provided as a marketing Ebook for free from Vaadin.  This CRM Application allowed a user to view the list of current contacts, edit an existing contact, delete an existing contact, and enter a new contact which can be saved to the database.  The dashboard view also contained a graphic displaying the percentage of contacts from each of the associated vendors.  This was displayed as a pie chart, the graphic visualization is one of the tools included in the Vaadin framework.
+ 
+The application begins with the front end “views” these are written in Java referencing the many tools and libraries provided by Vaadin.  The views include LoginView, MainLayout, and DashboardView.  Much of the backend processes are controlled by Spring which exists as a bit of a “black box.”  For instance the H2 database is implemented automatically by use of Spring and the Java Persistence API.  The Company and Contact classes have accompanying CompanyRepository and ContactRepository.  These objects are marked for persistent storage through annotations in the code.  The CompanyService and ContacdtService provide all business logic and to build the databases for each class in the tutorial.
+Landing page is for Authentication and Authorization.
 
 
-If you want to run the application locally in the production mode, use `spring-boot:run -Pproduction` command instead.
-### Running Integration Tests
-
-Integration tests are implemented using [Vaadin TestBench](https://vaadin.com/testbench). The tests take a few minutes to run and are therefore included in a separate Maven profile. We recommend running tests with a production build to minimize the chance of development time toolchains affecting test stability. To run the tests using Google Chrome, execute
-
-`mvn verify -Pit,production`
-
-and make sure you have a valid TestBench license installed.
-
-Profile `it` adds the following parameters to run integration tests:
-```sh
--Dwebdriver.chrome.driver=path_to_driver
--Dcom.vaadin.testbench.Parameters.runLocally=chrome
-```
-
-If you would like to run a separate test make sure you have added these parameters to VM Options of JUnit run configuration
-
-## Project overview
-
-Project follow the Maven's [standard directory layout structure](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html):
-- Under the `srs/main/java` are located Application sources
-   - `Application.java` is a runnable Java application class and a starting point
-   - `GreetService.java` is a  Spring service class
-   - `MainView.java` is a default view and entry point of the application
-- Under the `srs/test` are located test files
-- `src/main/resources` contains configuration files and static resources
-- The `frontend` directory in the root folder contains client-side dependencies and resource files
-   - All CSS styles used by the application are located under the root directory `frontend/styles`    
-   - Templates would be stored under the `frontend/src`
 
 
-## More Information and Next Steps
-
-- Vaadin Basics [https://vaadin.com/docs](https://vaadin.com/docs)
-- More components at [https://vaadin.com/components](https://vaadin.com/components) and [https://vaadin.com/directory](https://vaadin.com/directory)
-- Download this and other examples at [https://vaadin.com/start](https://vaadin.com/start)
-- Using Vaadin and Spring [https://vaadin.com/docs/v14/flow/spring/tutorial-spring-basic.html](https://vaadin.com/docs/v14/flow/spring/tutorial-spring-basic.html) article
-- Join discussion and ask a question at [https://vaadin.com/forum](https://vaadin.com/forum)
 
 
-## Notes
+ The MainView displays the content of the database.  In this application that is a list of contacts.  On the left side there are links to the “List” which is the current view, and Dashboard, which is a graphic display.  Single click on a record will load that record in to the edit screen fields for update or delete. Clicking the Add Contact button will open the edit screen empty, ready for a New Contact.
+The Dashboard displays the percentage of contacts associated with each of the vendors listed.
 
-If you run application from a command line, remember to prepend a `mvn` to the command.
+
+
+
+I was inspired by the Dungeons and Dragons Beyond website to create a tool to support the Star Wars Tabletop Roleplaying Game.  This discontinued D6 based game has a strong following online and this tool seems like it may provide some value to those fans. The application will perform the CRUD operations and store characters in a relational database to be recalled, updated, or deleted.  I began with the Vaadin tutorial app as a start.  I removed most of the elements and built my application upon the existing structure.  I used Vaadin primarily to build the front end.  I decided to implement an MS SQL database and access it using JDBC instead of Spring and JPA from the tutorial as an additional challenge and opportunity to gain experience with JDBC and database administration.  
+
+   
+
+A user will log in to the application.  A list of characters in the database will be displayed and accessible by the user.  The user may also create a new character and save it to the database.  The create, recall, update, and delete functions will happen in the CharacterView screen, a form with fields for all the data on a character sheet.
+
+User will log in on the landing page, this handles Authentication and Authorization.
+
+
+
+
+The MainView displays the characters in the database and offers users the opportunity to select an existing character to view/edit/delete in the CharacterForm, or by clicking New Character, navigate to a blank CharacterForm to create a new Character.
+
+
+
+The CharacterForm is a form which has fields for all elements of a Star Wars RPG character sheet.  Users can enter any or all data, including selecting
+Attribute Skills from the drop-down menus and adjust Attribute levels .  From this screen characters can be created, viewed, updated, or deleted.
